@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MovieLab</string>
+    <string name="movie_name">%1$s (%2$s)</string>
+    <string name="overview">Overview</string>
+</resources>
