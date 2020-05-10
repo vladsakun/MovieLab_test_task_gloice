@@ -14,6 +14,7 @@ class MovieNetworkDataSourceImpl(
     override val downloadedMovieList: LiveData<MovieListResponse>
         get() = _downloadedMovieList
 
+    //Fetch popular movie list
     override suspend fun fetchMovieList() {
         try {
             val fetchedSunInfo = sunApiService.getMoviesList().await()

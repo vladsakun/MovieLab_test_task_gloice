@@ -1,9 +1,9 @@
 package com.example.movielab.data.db.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
-
 
 @Entity(tableName = "movie_db")
 class MovieEntity(
@@ -18,7 +18,11 @@ class MovieEntity(
     val overview: String,
     val release_date: String,
     val poster_path: String,
-    val vote_average: Double
+    val vote_average: Double,
+
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    val image: ByteArray
+
 ) : Serializable
 
 

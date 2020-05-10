@@ -1,6 +1,11 @@
 package com.example.movielab.ui.moviedetail
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -38,15 +43,35 @@ class MovieDetailActivity : AppCompatActivity() {
 
     private fun loadItem() {
         // Set the title TextView to the item's name
-        mHeaderTitle.text = getString(R.string.movie_name, movie.title, movie.release_date)
+
+        val titleDate = movie.title + " (" + movie.release_date.substring(0,4) + ")"
+        val spannableStringBuilder = SpannableStringBuilder(titleDate)
+
+        val gray = ForegroundColorSpan(getColor(R.color.gray))
+
+        spannableStringBuilder.setSpan(gray, movie.title.length, titleDate.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        mHeaderTitle.text = spannableStringBuilder
+
+        // Set vote average TextView to the item's vote average
         mHeaderVoteAverage.text = movie.vote_average.toString()
+
+        // Set overview TextView to the item's overview
         overview_text.text = movie.overview
+
+        // Set image ImageView to the item's image
         loadThumbnail()
     }
 
     private fun loadThumbnail() {
-        Picasso.get().load(IMAGE_BASE_URL + movie.poster_path)
-            .into(mHeaderImageView)
+
+        val bm = BitmapFactory.decodeByteArray(
+            movie.image,
+            0,
+            movie.image.size
+        )
+
+        imageview_header.setImageBitmap(bm)
     }
 
     companion object {
@@ -56,8 +81,9 @@ class MovieDetailActivity : AppCompatActivity() {
         // View name of the header title. Used for activity scene transitions
         const val VIEW_NAME_HEADER_TITLE = "detail:header:title"
 
-        // View name of the header title. Used for activity scene transitions
+        // View name of the vote average. Used for activity scene transitions
         const val VIEW_NAME_HEADER_VOTE_AVERAGE = "detail:header:vote_average"
+
     }
 
 }

@@ -12,22 +12,24 @@ import java.util.*
 
 interface MovieApiService {
 
+    //Get popular movies
     @GET("popular")
     fun getMoviesList(
     ): Deferred<MovieListResponse>
 
     companion object {
 
-        const val BASE_URL = "https://api.themoviedb.org/3/movie/"
+        private const val BASE_URL = "https://api.themoviedb.org/3/movie/"
         const val IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185/"
-        const val API_KEY = "78668797853c3b31320011e0e411b0a6"
-        const val DEFAULT_PAGE_COUNT = "1"
+        private const val API_KEY = "78668797853c3b31320011e0e411b0a6"
+        private const val DEFAULT_PAGE_COUNT = "1"
 
         operator fun invoke(
             connectivityInterceptor: ConnectivityInterceptor
         ): MovieApiService {
             val requestInterceptor = Interceptor { chain ->
 
+                //Add default query params for requests
                 val url = chain.request()
                     .url()
                     .newBuilder()
@@ -35,6 +37,7 @@ interface MovieApiService {
                     .addQueryParameter("language", Locale.getDefault().toLanguageTag())
                     .addQueryParameter("page", DEFAULT_PAGE_COUNT)
                     .build()
+
                 val request = chain.request()
                     .newBuilder()
                     .url(url)
@@ -43,11 +46,13 @@ interface MovieApiService {
                 return@Interceptor chain.proceed(request)
             }
 
+            //Build OkHttpClient
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(requestInterceptor)
                 .addInterceptor(connectivityInterceptor)
                 .build()
 
+            //Build Retrofit
             return Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl(BASE_URL)

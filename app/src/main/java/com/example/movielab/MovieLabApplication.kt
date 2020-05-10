@@ -18,8 +18,11 @@ import org.kodein.di.generic.singleton
 class MovieLabApplication : Application(), KodeinAware {
 
     override val kodein = Kodein.lazy {
+
+        //AndroidX module
         import(androidXModule(this@MovieLabApplication))
 
+        //Database
         bind() from singleton { MovieLabDatabase(instance()) }
 
         //Dao
@@ -34,7 +37,7 @@ class MovieLabApplication : Application(), KodeinAware {
         bind() from singleton { MovieApiService(instance()) }
 
         //Repository
-        bind<MovieRepository>() with singleton { MovieRepositoryImpl(instance(), instance()) }
+        bind<MovieRepository>() with singleton { MovieRepositoryImpl(instance(), instance(), instance()) }
 
         //ViewModelFactories
         bind() from provider {  MovieListViewModelFactory(instance())}

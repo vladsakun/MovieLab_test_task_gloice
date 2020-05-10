@@ -8,6 +8,7 @@ class MovieListViewModel (
     private val movieRepository: MovieRepository
 ) : ViewModel() {
 
+    //Get movie list from db
     val movieList by lazyDeferred {
         movieRepository.getMovieList()
     }

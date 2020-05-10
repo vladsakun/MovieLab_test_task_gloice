@@ -1,25 +1,22 @@
 package com.example.movielab.adapters
 
-import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movielab.MOVIE_MESSAGE
 import com.example.movielab.R
 import com.example.movielab.data.db.entity.MovieEntity
-import com.example.movielab.data.network.MovieApiService.Companion.IMAGE_BASE_URL
 import com.example.movielab.ui.moviedetail.MovieDetailActivity
-import com.squareup.picasso.Picasso
+
 
 class MovieListAdapter(
     private val context: Context,
@@ -31,10 +28,12 @@ class MovieListAdapter(
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     inner class MovieListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var moviePoster = itemView.findViewById<ImageView>(R.id.movie_poster)
-        var movieName = itemView.findViewById<TextView>(R.id.movie_name)
-        var movieRating = itemView.findViewById<TextView>(R.id.rating)
-        var movieReleaseDate = itemView.findViewById<TextView>(R.id.movie_release_date)
+
+        //Init views
+        var moviePoster: ImageView = itemView.findViewById(R.id.movie_poster)
+        var movieName: TextView = itemView.findViewById(R.id.movie_name)
+        var movieRating: TextView = itemView.findViewById(R.id.rating)
+        var movieReleaseDate: TextView = itemView.findViewById(R.id.movie_release_date)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieListViewHolder {
@@ -47,19 +46,26 @@ class MovieListAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieListViewHolder, position: Int) {
+
+        //Set text values to view of item's values
         holder.movieName.text = moviesArrayList[position].title
         holder.movieReleaseDate.text = moviesArrayList[position].release_date
         holder.movieRating.text = moviesArrayList[position].vote_average.toString()
 
-        Picasso.get()
-            .load(IMAGE_BASE_URL + moviesArrayList[position].poster_path)
-            .fit()
-            .error(R.drawable.default_movie)
-            .into(holder.moviePoster)
+        //convert byte array to bitmap
+        val bm = BitmapFactory.decodeByteArray(
+            moviesArrayList[position].image,
+            0,
+            moviesArrayList[position].image.size
+        )
 
+        //Set bitmap image on movie poster
+        holder.moviePoster.setImageBitmap(bm)
+
+        //On movie click switch on Detail Activity
         holder.itemView.setOnClickListener {
 
-            //Pair of views
+            //Pairs of views
             val p1 = Pair.create<View, String>(
                 holder.moviePoster,
                 MovieDetailActivity.VIEW_NAME_HEADER_IMAGE
@@ -78,20 +84,14 @@ class MovieListAdapter(
             val intent = Intent(context, MovieDetailActivity::class.java)
             intent.putExtra(MOVIE_MESSAGE, moviesArrayList[position])
 
+            //Set pairs for transition
             val activityOptions: ActivityOptionsCompat =
                 ActivityOptionsCompat.makeSceneTransitionAnimation(
                     activity, p1, p2, p3
                 )
 
-            // Now we can start the Activity, providing the activity options as a bundle
+            //Start the Activity, providing the activity options as a bundle
             context.startActivity(intent, activityOptions.toBundle())
         }
     }
-
-    private val mOnItemClickListener =
-        OnItemClickListener { adapterView, view, position, id ->
-
-
-        }
-
 }

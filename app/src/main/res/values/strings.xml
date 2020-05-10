@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">MovieLab</string>
-    <string name="movie_name">%1$s (%2$s)</string>
+    <string name="app_name" translatable="false">MovieLab</string>
+    <string name="movie_name" translatable="false">%1$s (%2$s)</string>
     <string name="overview">Overview</string>
+    <string name="offline_message">You are offline</string>
+
 </resources>
