@@ -3,5 +3,8 @@
     <string name="movie_name" translatable="false">%1$s (%2$s)</string>
     <string name="overview">Overview</string>
     <string name="offline_message">You are offline</string>
+    <string name="genres">Genres</string>
+    <string name="cast">Cast</string>
+    <string name="directors">Directors</string>
 
 </resources>

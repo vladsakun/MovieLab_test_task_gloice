@@ -2,5 +2,7 @@
 <resources>
     <string name="overview">Описание</string>
     <string name="offline_message">Вы оффлайн</string>
-
+    <string name="genres">Жанры</string>
+    <string name="cast">В ролях</string>
+    <string name="directors">Режиссёры</string>
 </resources>

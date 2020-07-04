@@ -9,19 +9,19 @@ import java.io.Serializable
 class MovieEntity(
 
     @PrimaryKey(autoGenerate = false)
-    val id: Int,
+    val id: Double,
 
-    val popularity: Double,
-    val adult: Boolean,
-    val original_title: String,
-    val title: String,
-    val overview: String,
-    val release_date: String,
-    val poster_path: String,
-    val vote_average: Double,
+    val popularity: Double?,
+    val adult: Boolean?,
+    val original_title: String?,
+    var title: String,
+    var overview: String?,
+    var release_date: String?,
+    val poster_path: String?,
+    val vote_average: Double?,
 
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-    val image: ByteArray
+    val image: ByteArray?
 
 ) : Serializable
 

@@ -3,6 +3,9 @@ package com.example.movielab.ui.movielist
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -25,6 +28,8 @@ import org.kodein.di.generic.instance
 
 class MovieListActivity : ScopedActivity(), KodeinAware,
     ConnectivityReceiver.ConnectivityReceiverListener {
+
+    private val TAG = "MovieListActivity"
 
     //Kodein for dependency injections
     override val kodein by closestKodein()
@@ -115,12 +120,51 @@ class MovieListActivity : ScopedActivity(), KodeinAware,
             if (it == null) return@Observer
 
             updateMovieAdapter(it)
-            progressBar.visibility = View.GONE
         })
+
+        val searchedMovieList = viewModel.searchedMovies.await()
+
+        searchedMovieList.observe(this@MovieListActivity, Observer {
+            if (it == null) return@Observer
+
+            updateMovieAdapter(it)
+        })
+
+        search_Et.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(text: CharSequence, p1: Int, p2: Int, p3: Int) {
+                if (text.isNotEmpty()) {
+                    viewModel.searchMovie(text.toString())
+                    showProgressBar(true)
+                } else {
+                    if (movieList != null) {
+                        updateMovieAdapter(movieList.value!!)
+                    }
+                }
+            }
+        })
+
+        removeText.setOnClickListener {
+            search_Et.setText("")
+        }
+    }
+
+    private fun showProgressBar(isShow: Boolean) {
+        if (isShow) {
+            progressBar.visibility = View.VISIBLE
+        } else {
+            progressBar.visibility = View.GONE
+        }
     }
 
     private fun updateMovieAdapter(it: List<MovieEntity>) {
         adapter.moviesArrayList = it
         adapter.notifyDataSetChanged()
+        showProgressBar(false)
     }
 }

@@ -5,6 +5,7 @@ import com.example.movielab.data.db.MovieLabDatabase
 import com.example.movielab.data.network.*
 import com.example.movielab.data.repository.MovieRepository
 import com.example.movielab.data.repository.MovieRepositoryImpl
+import com.example.movielab.ui.moviedetail.MovieDetailViewModelFactory
 import com.example.movielab.ui.movielist.MovieListViewModelFactory
 import okhttp3.internal.connection.ConnectInterceptor
 import org.kodein.di.Kodein
@@ -41,5 +42,6 @@ class MovieLabApplication : Application(), KodeinAware {
 
         //ViewModelFactories
         bind() from provider {  MovieListViewModelFactory(instance())}
+        bind() from provider {  MovieDetailViewModelFactory(instance())}
     }
 }

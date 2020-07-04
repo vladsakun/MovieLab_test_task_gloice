@@ -64,7 +64,7 @@
                     tools:ignore="RtlSymmetry" />
 
                 <TextView
-                    android:id="@+id/overview_text"
+                    android:id="@+id/overview_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"

@@ -1,26 +1,43 @@
 package com.example.movielab.data.network
 
+import com.example.movielab.data.response.MovieDetailResponse
 import com.example.movielab.data.response.MovieListResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
+import retrofit2.http.Url
 import java.util.*
 
 interface MovieApiService {
 
     //Get popular movies
     @GET("popular")
-    fun getMoviesList(
-    ): Deferred<MovieListResponse>
+    fun getMoviesList(): Deferred<MovieListResponse>
+
+    @GET("trending/movie/week")
+    fun getTrendingMovies(): Deferred<MovieListResponse>
+
+    @GET("search/movie")
+    fun serchMovie(@Query("query") query: String): Deferred<MovieListResponse>
+
+    @GET("movie/{movie_id}")
+    fun getMovie(@Path("movie_id") movie_id: Double): Deferred<MovieDetailResponse>
+
+    @GET
+    fun loadImage(@Url url:String): Call<ResponseBody>
 
     companion object {
 
-        private const val BASE_URL = "https://api.themoviedb.org/3/movie/"
-        const val IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185/"
+        private const val BASE_URL = "https://api.themoviedb.org/3/"
+        const val IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185"
         private const val API_KEY = "78668797853c3b31320011e0e411b0a6"
         private const val DEFAULT_PAGE_COUNT = "1"
 
@@ -35,7 +52,6 @@ interface MovieApiService {
                     .newBuilder()
                     .addQueryParameter("api_key", API_KEY)
                     .addQueryParameter("language", Locale.getDefault().toLanguageTag())
-                    .addQueryParameter("page", DEFAULT_PAGE_COUNT)
                     .build()
 
                 val request = chain.request()
